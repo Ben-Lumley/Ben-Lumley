@@ -37,15 +37,15 @@ def execute_cypher_query(query_text):
     print("---------------------------------------------------------------------------------------------")
 
 
-# Clean-up Neo4j DB prior to run
+#Clean-up Neo4j DB prior to run
 execute_cypher_query(
     '''MATCH (n)
     DETACH DELETE (n)'''
     )
 
-# Ingest data and create nodes from input files as per data model
+#Ingest data and create nodes from input files as per data model
 
-# Person Node
+#Person Node
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_trips.csv' AS row
@@ -53,21 +53,21 @@ execute_cypher_query(
     passportnumber : row.passportnumber,
     name : row.name})'''
     )
-# Institution Node
+#Institution Node
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_education.csv' AS row
     MERGE (:Institution{
     nameofinstitution: row.nameofinstitution})'''
     )
-# Organization Node
+#Organization Node
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_work.csv' AS row
     MERGE (:Organization{
     nameoforganization : row.nameoforganization})'''
     )
-# Merchant Node
+#Merchant Node
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_transaction.csv' AS row
@@ -76,30 +76,30 @@ execute_cypher_query(
     )
 
 
-# Create Country nodes from all input files
+#Create Country nodes from all input files
 
-# from trips
+#from trips
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
         'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_trips.csv' AS row
         MERGE (:Country{
         country : trim(row.citizenship)})'''
     )
-# from education
+#from education
 execute_cypher_query(
         '''LOAD CSV WITH HEADERS FROM
         'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_education.csv' AS row
         MERGE (:Country{
         country : trim(row.country)})'''
     )
-# from work
+#from work
 execute_cypher_query(
         '''LOAD CSV WITH HEADERS FROM
         'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_work.csv' AS row
         MERGE (:Country{
         country : trim(row.country)})'''
     )
-# from transaction
+#from transaction
 execute_cypher_query(
         '''LOAD CSV WITH HEADERS FROM
         'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_transaction.csv' AS row
@@ -109,9 +109,9 @@ execute_cypher_query(
 
 
 
-# Create relationships as per data model
+#Create relationships as per data model
 
-# (person)-[ATTENDS]->(institution)
+#(person)-[ATTENDS]->(institution)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM 
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_education.csv' AS education
@@ -123,7 +123,7 @@ execute_cypher_query(
     r.startyear = education.startyear,
     r.endyear = education.endyear'''
     )
-# (person)-[WORKS_FOR]->(organization)
+#(person)-[WORKS_FOR]->(organization)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM 
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_work.csv' AS work
@@ -135,7 +135,7 @@ execute_cypher_query(
     r.startyear = work.startyear,
     r.endyear = work.endyear'''
     )
-# (person)-[CITIZEN_OF]->(country)
+#(person)-[CITIZEN_OF]->(country)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_trips.csv' AS trips
@@ -143,7 +143,7 @@ execute_cypher_query(
     MATCH (c : Country {country: trim(trips.citizenship)})
     MERGE (person)-[r:CITIZEN_OF]->(c)'''
     )
-# (person)-[DEPARTS_FROM]->(country)
+#(person)-[DEPARTS_FROM]->(country)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_trips.csv' AS trips
@@ -153,7 +153,7 @@ execute_cypher_query(
     SET
     r.departuredate = trips.departuredate'''
     )
-# (person)-[ARRIVES_AT]->(country)
+#(person)-[ARRIVES_AT]->(country)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_trips.csv' AS trips
@@ -163,7 +163,7 @@ execute_cypher_query(
     SET
     r.arrivaldate = trips.departuredate'''
     )
-# (merchant)-[r:BASED_IN]->(country)
+#(merchant)-[r:BASED_IN]->(country)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_transaction.csv' AS transaction
@@ -171,7 +171,7 @@ execute_cypher_query(
     MATCH (c : Country {country: trim(transaction.country)})
     MERGE (merchant)-[r:BASED_IN]->(c)'''
     )
-# (person)-[TRANSACTS]->(merchant)
+#(person)-[TRANSACTS]->(merchant)
 execute_cypher_query(
     '''LOAD CSV WITH HEADERS FROM
     'https://gist.githubusercontent.com/maruthiprithivi/10b456c74ba99a35a52caaffafb9d3dc/raw/a46af9c6c4bf875ded877140c112e9ff36f8f2e8/sng_transaction.csv' AS transaction
