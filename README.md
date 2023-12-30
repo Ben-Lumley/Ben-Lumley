@@ -1,4 +1,4 @@
-Neo4j Sales Engineering Technical Assignment Part 2
+# Neo4j Sales Engineering Technical Assignment Part 2
 
 **Set up Neo4j Enterprise (Docker / VM/ Sandbox).**
 
