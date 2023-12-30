@@ -12,7 +12,12 @@ PASSWORD: parallels-confinements-warranty
 
 I chose the:	Investigation for Public Safety - Social Network Data
 
-The data moedel I developed for  this data using arrows.app can be found at: https://arrows.app/#/local/id=OALrv9s26BnVLfAvv77z
+The data moedel I developed for this data using arrows.app:
+
+
+![image](https://github.com/Ben-Lumley/Ben-Lumley/assets/155236280/37a0295f-e89f-47cb-99f4-a6cc04bb4854)
+
+
 
 
 **Develop a graph-enabled solution using one of the following programming languages: JavaScript, Python, Go, .NET, or Java. This application should be capable of ingesting data based on the created data model.**
